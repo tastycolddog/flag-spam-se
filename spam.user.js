@@ -3,7 +3,7 @@
 // @namespace    https://tastycolddog.github.io/
 // @version      2025-08-22
 // @description  Adds a Flag as Spam button to quickly flag spam without opening the dialog. Useful for spam waves.
-// @author       user7215
+// @author       tastycolddog
 // @match        *://*.stackexchange.com/questions/*/*
 // @match        *://*.askubuntu.com/questions/*/*
 // @match        *://*.mathoverflow.net/questions/*/*
@@ -27,7 +27,7 @@ var success_message = "Successfully flagged!"
 // ---- API CONFIG ---
 var qid = location.pathname.split("/")[2]
 var site = location.hostname;
-var token = localStorage.getItem("user7215-flagspam-accessToken");
+var token = localStorage.getItem("tastycolddog-flagspam-accessToken");
 var key = "rl_jhoXv9U3Hh3swDc3aioi1uWKo";
 // --- END API CONFIG ---
 
@@ -42,7 +42,7 @@ btn.className = "s-btn s-btn__link";
 btn.onclick = function(){
     if (!token){ // get access token if not exist.
       alert("Redirecting to get API access token. This question has not been flagged as spam. This will happen one time for every separate domain and every time you clear your localStorage (cookies).")
-      location.href = "https://user7215.github.io/flag-spam-se/access-token.html?redirect=" + location.href;
+      location.href = "https://tastycolddog.github.io/flag-spam-se/access-token.html?redirect=" + location.href;
     }
     // Flag spam
     var xhr = new XMLHttpRequest();
@@ -53,14 +53,14 @@ btn.onclick = function(){
     var optionID = optionsJSON.items[0].option_id;
     if (!optionID){
         alert(error_message);
-        console.log("There was an error getting flag options. This might occur because this is your own question. If you think this is a bug, create an issue on GitHub (https://github.com/user7215/flag-spam-se) or ask on the StackApps post (https://stackapps.com/questions/11876/placeholder-flag-as-spam-quick-button). Please include the below debug output. Please include the below output.");
+        console.log("There was an error getting flag options. This might occur because this is your own question. If you think this is a bug, create an issue on GitHub (https://github.com/tastycolddog/flag-spam-se) or ask on the StackApps post (https://stackapps.com/questions/11876/placeholder-flag-as-spam-quick-button). Please include the below debug output. Please include the below output.");
         console.log("options: ", options, "\noptionsJSON: ", optionsJSON, "\noptionID: ", optionID);
     } else {
         xhr.open("POST", "https://api.stackexchange.com/2.3/questions/" + qid + "/flags/add/", false);
         var formData = new FormData();
         formData.append("id", qid);
         formData.append("option_id", optionID);
-        formData.append("comment", "Done through user7215's Flag as Spam Quick Button userscript. https://github.com/user7215/flag-spam-se https://stackapps.com/questions/11876/flag-as-spam-quick-button");
+        formData.append("comment", "Done through tastycolddog's Flag as Spam Quick Button userscript. https://github.com/tastycolddog/flag-spam-se https://stackapps.com/questions/11876/flag-as-spam-quick-button");
         formData.append("key", key);
         formData.append("access_token", token);
         formData.append("preview", testing_mode);
@@ -69,7 +69,7 @@ btn.onclick = function(){
         xhr.send(formData);
         if (xhr.status !== 200){
             alert(error_message);
-            console.log("There was an error flagging the question as spam. This might occur because this is your own question or you have already flagged this question/retracted the vote. If you think this is a bug, create an issue on GitHub (https://github.com/user7215/flag-spam-se) or ask on the StackApps post (https://stackapps.com/questions/11876/placeholder-flag-as-spam-quick-button). Please include the below debug output. Please include the below output.");
+            console.log("There was an error flagging the question as spam. This might occur because this is your own question or you have already flagged this question/retracted the vote. If you think this is a bug, create an issue on GitHub (https://github.com/tastycolddog/flag-spam-se) or ask on the StackApps post (https://stackapps.com/questions/11876/flag-as-spam-quick-button). Please include the below debug output. Please include the below output.");
             console.log("/questions/{id}/flags/add returned " + xhr.status + " instead of 200. responseText: " + xhr.responseText);
         } else {
             alert(success_message);
@@ -79,7 +79,7 @@ btn.onclick = function(){
 
 if (location.hash.includes("accessToken")){ // save access token
   let accessToken = location.hash.split("#")[1].split("=")[1];
-  localStorage.setItem("user7215-flagspam-accessToken", accessToken);
+  localStorage.setItem("tastycolddog-flagspam-accessToken", accessToken);
 }
 
 // append spam button
